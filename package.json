@@ -24,6 +24,7 @@
     "react-d3-speedometer": "^0.8.0",
     "react-date-range": "^1.0.0-beta",
     "react-dom": "^16.12.0",
+    "react-native-fs": "^2.18.0",
     "react-perfect-scrollbar": "^1.5.3",
     "react-resizable-rotatable-draggable": "^0.2.0",
     "react-rotatable-2": "^1.0.2",

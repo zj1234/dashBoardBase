@@ -21,6 +21,24 @@ export default theme => ({
         textAlign:"center", 
         backgroundColor:"black"
     },
+    max:{
+        width:"100%"
+    },
+    width85:{
+        width:"50%"
+    },
+    textWhite:{
+        color:"white"
+    },
+    backWhite:{
+        backgroundColor:"white"
+    },
+    backOrange:{
+        backgroundColor:"orange"
+    },
+    colorWhite:{
+        color:"white"
+    },
     circular:{
         color:"white"
     }

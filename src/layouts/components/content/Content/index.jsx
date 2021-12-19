@@ -2,59 +2,42 @@ import React, { Component , forwardRef} from 'react';
 
 
 import Loading from '../../../../utils/Loading'
+import MaterialTableComponent from '../../../../utils/MaterialTable'
 import {JsonData} from '../../../../config/data'
+import AddModal from './AddModal';
 import styles from './styles';
 // Material components
 import { withStyles } from '@material-ui/core/styles';
 import compose from 'recompose/compose';
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
-import MaterialTable from "material-table";
-
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import PersonIcon from '@material-ui/icons/Person';
-
-const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-};
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
 class Content extends Component {
     constructor(props) {
         super(props)
+        this.myCallback = this.myCallback.bind(this);
         this.state = {
-            isLoading: true
+            isLoading: true,
+            saveModal:false
         }
+    }
+
+
+
+    myCallback = (e, row) => {
+        this.setState({
+            saveModal:true,
+            row:row,
+            event:e,
+        })
+    }
+    handleClose=()=>{
+        this.setState({
+            saveModal:false
+        })
     }
 
     componentDidMount() {
@@ -62,15 +45,23 @@ class Content extends Component {
     }
 
     processData = () => {
-        console.log(JsonData)
+        //console.log(JsonData)
+        var keys=[{"title":'id', 'field':'tableData.id'},
+            {"title":'name', 'field':'name'},
+            {"title":"email",'field':"email"},
+            {"title":"phone",'field':"phone.number"},
+            {"title":"citycode",'field':"phone.citycode"},
+            {"title":"contrycode",'field':"phone.contrycode"},
+          ]
         this.setState({
             isLoading:false,
+            keys:keys,
             data:JsonData
         })
     }
     
     render() {
-        const {isLoading}=this.state
+        const {isLoading, keys, data, saveModal, row, e}=this.state
         const {classes}=this.props
         if (isLoading===true) {
             return(
@@ -79,9 +70,31 @@ class Content extends Component {
         }else{
             return(
                 <Grid container spacing={1}>
-                    <Grid item  lg={12}>
-                        <Typography style={{color:"white"}}>djkhsd</Typography>
+                    <Grid item  lg={12} md={12} className={classes.max}>
+                        <MaterialTableComponent myCallback={this.myCallback} keys={keys} data={data}/>
                     </Grid>
+                    <Modal
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        open={saveModal}
+                        onClose={this.handleClose}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        closeAfterTransition
+                        disableAutoFocus={true}
+                        disableEnforceFocus={true}
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                            timeout: 500,
+                        }}
+                    >                                    
+                        <Fade in={saveModal}>
+                            <AddModal row={row} event={e}/>
+                        </Fade>
+                    </Modal>
                 </Grid>
             )
         }
