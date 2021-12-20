@@ -45,17 +45,25 @@ const tableIcons = {
   };
 
 class MaterialTableComponent extends Component {
-
+  constructor(props) {
+    super(props)
+      this.state = {
+          data: this.props.data,
+          keys:this.props.keys,
+      }
+  }
   handleShow=(e, row)=>{
     this.props.myCallback(e, row)
   }
+
   render(){
-    //console.log('mat', this.props.keys)
+    
+    const {data, keys}=this.state
       return (
         <MaterialTable
           icons={tableIcons}
-          columns={this.props.keys}
-          data={this.props.data}
+          columns={keys}
+          data={data}
           title=""
           localization={{
               grouping: {

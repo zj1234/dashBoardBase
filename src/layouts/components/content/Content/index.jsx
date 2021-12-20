@@ -19,13 +19,24 @@ class Content extends Component {
     constructor(props) {
         super(props)
         this.myCallback = this.myCallback.bind(this);
+        this.myCallbackClose = this.myCallbackClose.bind(this);
         this.state = {
             isLoading: true,
-            saveModal:false
+            saveModal:false,
+            data:JsonData,
+            update:false
         }
     }
 
-
+    myCallbackClose = (data) => {
+        this.setState(prevState=>({
+            saveModal:false,
+            data:data,
+            update:!prevState.update,
+            isLoading:true
+        }))
+        this.processData();
+    }
 
     myCallback = (e, row) => {
         this.setState({
@@ -45,7 +56,8 @@ class Content extends Component {
     }
 
     processData = () => {
-        //console.log(JsonData)
+        //console.log("process")
+        const {data}=this.state
         var keys=[{"title":'id', 'field':'tableData.id'},
             {"title":'name', 'field':'name'},
             {"title":"email",'field':"email"},
@@ -56,13 +68,13 @@ class Content extends Component {
         this.setState({
             isLoading:false,
             keys:keys,
-            data:JsonData
         })
     }
     
     render() {
-        const {isLoading, keys, data, saveModal, row, e}=this.state
+        const {isLoading, keys, data, saveModal, row, event, update}=this.state
         const {classes}=this.props
+        //console.log("render", data)
         if (isLoading===true) {
             return(
                 <Loading color={"white"}/>
@@ -71,7 +83,7 @@ class Content extends Component {
             return(
                 <Grid container spacing={1}>
                     <Grid item  lg={12} md={12} className={classes.max}>
-                        <MaterialTableComponent myCallback={this.myCallback} keys={keys} data={data}/>
+                        <MaterialTableComponent update={update} myCallback={this.myCallback} keys={keys} data={data}/>
                     </Grid>
                     <Modal
                         aria-labelledby="simple-modal-title"
@@ -92,7 +104,7 @@ class Content extends Component {
                         }}
                     >                                    
                         <Fade in={saveModal}>
-                            <AddModal row={row} event={e}/>
+                            <AddModal myCallbackClose={this.myCallbackClose} row={row} event={event} data={data}/>
                         </Fade>
                     </Modal>
                 </Grid>
