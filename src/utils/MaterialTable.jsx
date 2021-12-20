@@ -76,17 +76,20 @@ class MaterialTableComponent extends Component {
               toolbar: {
               searchTooltip: 'Buscar'
               },
-              pagination: {
-                labelRowsSelect: 'Filas',
+              /*pagination: {
+                labelRowsSelect: 'F',
                 labelDisplayedRows: ' {from}-{to} de {count}',
                 firstTooltip: 'Pri. pág.',
                 previousTooltip: 'Pág. previa',
                 nextTooltip: 'Sig. pág.',
                 lastTooltip: 'Últ. pág'
-              }
+              }*/
           }}
           options={{
               grouping: true
+          }}
+          header={{
+            actions: 'Actiondvxgdfs'
           }}
           actions={[
             {
